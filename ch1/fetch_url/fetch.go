@@ -4,25 +4,30 @@ import (
 	"fmt"
 	"os"
 	"net/http"
-	"io/ioutil"
+	"io"
+	"strings"
 )
 
 func main() {
 	for _, url := range os.Args[1:] {
+		if !strings.HasPrefix(url, "http://") {
+			url = "http://" + url
+		}
+		
 		resp, err := http.Get(url)
-		// fmt.Printf("Code: %s", resp.Status)
+		fmt.Printf("Code: %s\n\n", resp.Status)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
 
-		b, err := ioutil.ReadAll(resp.Body)
+		b, err := io.Copy(os.Stdout, resp.Body)
 		resp.Body.Close()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
 		}
 
-		fmt.Printf("%s", b)
+		fmt.Fprint(os.Stdout, b)
 		
 	}
 
