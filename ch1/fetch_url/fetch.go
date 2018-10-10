@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"net/http"
 	"io"
+	"net/http"
+	"os"
 	"strings"
 )
 
@@ -13,9 +13,8 @@ func main() {
 		if !strings.HasPrefix(url, "http://") {
 			url = "http://" + url
 		}
-		
+
 		resp, err := http.Get(url)
-		fmt.Printf("Code: %s\n\n", resp.Status)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
@@ -28,7 +27,7 @@ func main() {
 		}
 
 		fmt.Fprint(os.Stdout, b)
-		
+
 	}
 
 }
